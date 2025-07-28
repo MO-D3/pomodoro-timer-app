@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="640" height="120" viewBox="0 0 640 120" role="img" aria-label="pomodoro with me logo">
+  <defs>
+    <style>
+      .brand-text { fill:#E6F0F3; font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, "Helvetica Neue", Arial, "Noto Sans", "Liberation Sans", sans-serif; font-weight: 700; }
+    </style>
+  </defs>
+  <!-- background is transparent by design -->
+  <!-- icon -->
+  <g transform="translate(10,10)">
+    <circle cx="50" cy="60" r="40" fill="#3D6F68"/>
+    <path d="M50 18c-3 8-5 12-5 12h10s-2-4-5-12z" fill="#2C524D"/>
+    <path d="M32 26l-11 10h23z" fill="#2C524D"/>
+    <path d="M68 26l-12 10h24z" fill="#2C524D"/>
+  </g>
+  <!-- logotype -->
+  <text class="brand-text" x="120" y="78" font-size="44" letter-spacing="0.5">
+    pomodoro with me
+  </text>
+</svg>
