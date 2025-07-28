@@ -12,6 +12,6 @@ test.describe('Keyboard interactions', () => {
     await expect(await pomodoro.isPaused()).toBeTruthy();
     page.on('dialog', (dialog) => dialog.accept());
     await page.keyboard.press('r');
-    await expect(await pomodoro.getTimerText()).toContain('25:00');
+    await expect.poll(async () => await pomodoro.getTimerText()).toContain('25:00');
   });
 });
