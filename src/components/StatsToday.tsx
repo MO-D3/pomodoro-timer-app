@@ -9,12 +9,12 @@ const StatsToday: React.FC<StatsTodayProps> = ({ sessions, workMinutes }) => {
       className="mt-2 border border-brand-blueMuted rounded-xl p-2 bg-brand-surface text-brand-text w-full max-w-xs mx-auto"
       role="complementary"
     >
-      <h2 className="text-xl font-semibold mb-1">Dzisiejsze statystyki</h2>
+      <h2 className="text-xl font-semibold mb-1">Today's stats</h2>
       <p>
-        Liczba zakończonych pomodoro: <strong>{sessions}</strong>
+        Pomodoros completed: <strong>{sessions}</strong>
       </p>
       <p>
-        Łączny czas pracy: <strong>{workMinutes}</strong> min
+        Total work time: <strong>{workMinutes}</strong> min
       </p>
     </div>
   );

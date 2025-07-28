@@ -57,7 +57,7 @@ const Settings: React.FC<SettingsProps> = ({
         </label>
         {/* Sounds */}
         <label className="flex items-center justify-between" htmlFor="sounds-toggle">
-          <span id="sounds-label">Dźwięki</span>
+          <span id="sounds-label">Sounds</span>
           <input
             id="sounds-toggle"
             type="checkbox"
@@ -69,7 +69,7 @@ const Settings: React.FC<SettingsProps> = ({
         </label>
         {/* Volume */}
         <label className="flex items-center justify-between" htmlFor="volume-range">
-          <span id="volume-label">Głośność: {volume}%</span>
+          <span id="volume-label">Volume: {volume}%</span>
           <input
             id="volume-range"
             type="range"
@@ -83,7 +83,7 @@ const Settings: React.FC<SettingsProps> = ({
         </label>
         {/* Notifications */}
         <label className="flex items-center justify-between" htmlFor="notifications-toggle">
-          <span id="notifications-label">Powiadomienia</span>
+          <span id="notifications-label">Notifications</span>
           <input
             id="notifications-toggle"
             type="checkbox"
@@ -101,7 +101,7 @@ const Settings: React.FC<SettingsProps> = ({
         </label>
         {/* Vibrations */}
         <label className="flex items-center justify-between" htmlFor="vibrations-toggle">
-          <span id="vibrations-label">Wibracje</span>
+          <span id="vibrations-label">Vibrations</span>
           <input
             id="vibrations-toggle"
             type="checkbox"

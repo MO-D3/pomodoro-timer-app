@@ -19,7 +19,7 @@ const Controls = ({ isRunning, start, pause, reset }: ControlsProps) => {
       if (e.key.toLowerCase() === 'r') {
         e.preventDefault();
         // confirm reset
-        if (window.confirm('Czy na pewno zresetować licznik?')) {
+        if (window.confirm('Are you sure you want to reset the timer?')) {
           reset();
         }
       }
@@ -39,7 +39,7 @@ const Controls = ({ isRunning, start, pause, reset }: ControlsProps) => {
       </button>
       <button
         onClick={() => {
-          if (window.confirm('Czy na pewno zresetować licznik?')) {
+          if (window.confirm('Are you sure you want to reset the timer?')) {
             reset();
           }
         }}

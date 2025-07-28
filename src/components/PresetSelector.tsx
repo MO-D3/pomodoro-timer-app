@@ -19,7 +19,7 @@ const PresetSelector: React.FC<PresetSelectorProps> = ({
 }) => {
   const items = includeSettings ? [...presets, { label: 'Ustawienia', work: 0, break: 0 }] : presets;
   return (
-    <div role="tablist" aria-label="Wybór presetu" className="flex space-x-1 flex-wrap w-full justify-center" style={{ minWidth: 0 }}>
+    <div role="tablist" aria-label="Preset selection" className="flex space-x-1 flex-wrap w-full justify-center" style={{ minWidth: 0 }}>
       {items.map((preset, index) => {
         const isSelected = selectedIndex === index;
         const isSettings = includeSettings && index === items.length - 1;

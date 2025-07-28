@@ -55,8 +55,8 @@ const Home: React.FC = () => {
       endAudio.play();
       // Browser notifications
       if (notificationsEnabled) {
-        const title = completedPhase === 'work' ? 'Czas na przerwę!' : 'Czas do pracy!';
-        send(title, { body: 'Interwał pomodoro zakończony.' });
+        const title = completedPhase === 'work' ? 'Time for a break!' : 'Time to work!';
+        send(title, { body: 'Pomodoro interval finished.' });
       }
       // Vibrations
       if (vibrations && 'vibrate' in navigator) {

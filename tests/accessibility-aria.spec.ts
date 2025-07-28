@@ -37,9 +37,9 @@ test.describe('ARIA structure', () => {
     await pomodoro.goto();
     await pomodoro.selectPreset('Ustawienia');
     await expect(pomodoro.timerPanel).toContainText(/ustawienia/i);
-    await expect(page.getByLabel('Dźwięki')).toBeVisible();
-    await expect(page.getByLabel('Głośność')).toBeVisible();
-    await expect(page.getByLabel('Powiadomienia')).toBeVisible();
-    await expect(page.getByLabel('Wibracje')).toBeVisible();
+    await expect(page.getByLabel('Sounds')).toBeVisible();
+    await expect(page.getByLabel('Volume')).toBeVisible();
+    await expect(page.getByLabel('Notifications')).toBeVisible();
+    await expect(page.getByLabel('Vibrations')).toBeVisible();
   });
 });

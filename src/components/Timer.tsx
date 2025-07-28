@@ -46,7 +46,7 @@ const Timer: React.FC<TimerProps> = ({ minutes, seconds, progress, phase, status
           style={{ transition: 'stroke-dashoffset 0.2s linear' }}
         />
       </svg>
-      <div className="text-6xl font-mono tabular-nums" aria-label="Pozostały czas">
+      <div className="text-6xl font-mono tabular-nums" aria-label="Time left">
         {pad2(minutes)}:{pad2(seconds)}
       </div>
       <div className="text-xl uppercase tracking-widest text-brand-green" aria-label="Status sesji">
