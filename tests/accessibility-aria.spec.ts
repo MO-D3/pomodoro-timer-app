@@ -25,7 +25,7 @@ test.describe('ARIA structure', () => {
 
   test('changing preset updates timer and tabpanel', async ({ page }) => {
     const pomodoro = new PomodoroPage(page);
-    await pomodoro.goto(); 
+    await pomodoro.goto();
     await pomodoro.selectPreset('35/5');
     await expect.poll(async () => await pomodoro.getTimerText()).toContain('35:00');
     await pomodoro.selectPreset('10/5');
