@@ -6,6 +6,7 @@ export default defineConfig({
   expect: {
     timeout: 5 * 1000,
   },
+  reporter: 'list',
   fullyParallel: true,
   use: {
     baseURL: 'http://localhost:5173',
@@ -15,8 +16,24 @@ export default defineConfig({
   },
   projects: [
     {
-      name: 'chromium',
+      name: 'chromium-desktop',
       use: { ...devices['Desktop Chrome'] },
+    },
+    {
+      name: 'firefox-desktop',
+      use: { ...devices['Desktop Firefox'] },
+    },
+    {
+      name: 'safari-desktop',
+      use: { ...devices['Desktop Safari'] },
+    },
+    {
+      name: 'iphone-latest',
+      use: { ...devices['iPhone 15 Pro'] },
+    },
+    {
+      name: 'samsung-latest',
+      use: { ...devices['Galaxy S23 Ultra'] },
     },
   ],
 });
