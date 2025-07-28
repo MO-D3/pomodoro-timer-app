@@ -10,7 +10,12 @@ export default defineConfig([
     plugins: { js },
     extends: ['js/recommended'],
     languageOptions: { globals: globals.browser },
+    settings: {
+      react: {
+        version: 'detect',
+      },
+    },
   },
-  tseslint.configs.recommended,
-  pluginReact.configs.flat.recommended,
+  ...tseslint.configs.recommended,
+  ...(Array.isArray(pluginReact.configs.flat.recommended) ? pluginReact.configs.flat.recommended : [pluginReact.configs.flat.recommended]),
 ]);

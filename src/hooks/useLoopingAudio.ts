@@ -28,7 +28,9 @@ export function useLoopingAudio(src: string, volume: number, enabled: boolean) {
     if (!audio) return;
     try {
       await audio.play();
-    } catch {}
+    } catch {
+      // ignore play error (e.g. autoplay restrictions)
+    }
   };
 
   const pause = () => {

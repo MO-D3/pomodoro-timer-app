@@ -11,6 +11,8 @@ interface PresetSelectorProps {
   includeSettings?: boolean;
 }
 
+import * as React from 'react';
+
 const PresetSelector: React.FC<PresetSelectorProps> = ({
   presets,
   selectedIndex,
@@ -25,7 +27,7 @@ const PresetSelector: React.FC<PresetSelectorProps> = ({
       className="flex space-x-1 flex-wrap w-full justify-center"
       style={{ minWidth: 0 }}
     >
-      {items.map((preset, index) => {
+      {items.map((preset: PresetOption, index: number) => {
         const isSelected = selectedIndex === index;
         const isSettings = includeSettings && index === items.length - 1;
         return (

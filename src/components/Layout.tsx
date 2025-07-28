@@ -1,6 +1,7 @@
-import { type PropsWithChildren } from 'react';
+import * as React from 'react';
 
-const Layout = ({ children }: PropsWithChildren) => {
+
+const Layout: React.FC<React.PropsWithChildren> = ({ children }) => {
   return (
     <div className="min-h-screen flex flex-col">
       {/* Fixed header for always visible navbar */}

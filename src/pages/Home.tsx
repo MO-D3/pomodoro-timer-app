@@ -1,3 +1,4 @@
+import * as React from 'react';
 import { useState } from 'react';
 import Layout from '../components/Layout';
 import Timer from '../components/Timer';
@@ -45,6 +46,7 @@ const Home: React.FC = () => {
   const [stats, setStats] = useLocalStorage(todayKey, { sessions: 0, workMinutes: 0 });
 
   // Notifications
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const { permission, requestPermission, send } = useNotifications();
 
   // Audio hooks for end and lofi music

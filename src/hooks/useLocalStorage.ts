@@ -9,7 +9,7 @@ export function useLocalStorage<T>(key: string, initial: T) {
     try {
       const item = window.localStorage.getItem(key);
       return item ? JSON.parse(item) : initial;
-    } catch (error) {
+    } catch {
       return initial;
     }
   };
@@ -19,7 +19,7 @@ export function useLocalStorage<T>(key: string, initial: T) {
   useEffect(() => {
     try {
       window.localStorage.setItem(key, JSON.stringify(value));
-    } catch (error) {
+    } catch {
       // no-op for environments without storage
     }
   }, [key, value]);

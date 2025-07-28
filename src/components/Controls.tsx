@@ -1,3 +1,4 @@
+import * as React from 'react';
 import { useEffect } from 'react';
 
 interface ControlsProps {
@@ -7,14 +8,19 @@ interface ControlsProps {
   reset: () => void;
 }
 
-const Controls = ({ isRunning, start, pause, reset }: ControlsProps) => {
+const Controls: React.FC<ControlsProps> = (props) => {
+  const { isRunning, start, pause, reset } = props;
   // keyboard shortcuts
   useEffect(() => {
     const handler = (e: KeyboardEvent) => {
       if (e.target && (e.target as HTMLElement).tagName === 'BUTTON') return;
       if (e.key === ' ' || e.key === 'Enter') {
         e.preventDefault();
-        isRunning ? pause() : start();
+        if (isRunning) {
+          pause();
+        } else {
+          start();
+        }
       }
       if (e.key.toLowerCase() === 'r') {
         e.preventDefault();

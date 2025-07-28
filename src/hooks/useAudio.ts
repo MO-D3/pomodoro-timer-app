@@ -31,7 +31,7 @@ export function useAudio(src: string, volume: number, enabled: boolean) {
     try {
       audio.currentTime = 0;
       await audio.play();
-    } catch (err) {
+    } catch {
       // swallow error (e.g. autoplay restrictions)
     }
   };

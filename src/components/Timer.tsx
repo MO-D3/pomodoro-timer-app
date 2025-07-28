@@ -1,3 +1,4 @@
+import * as React from 'react';
 import { pad2 } from '../lib/format';
 import type { Phase } from '../hooks/useTimer';
 
