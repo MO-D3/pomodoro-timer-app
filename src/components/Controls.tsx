@@ -32,7 +32,7 @@ const Controls = ({ isRunning, start, pause, reset }: ControlsProps) => {
     <div className="flex flex-wrap space-x-2 mt-2 w-full justify-center" aria-label="Sterowanie" style={{ minWidth: 0 }}>
       <button
         onClick={isRunning ? pause : start}
-        className="px-2 py-1 rounded-full bg-brand-green text-brand-text font-medium focus:ring-2 focus:ring-brand-greenMuted text-xs min-w-[60px] mb-1"
+        className="px-4 py-2 rounded-full bg-brand-green text-brand-text font-medium focus:ring-2 focus:ring-brand-greenMuted text-base min-w-[90px] mb-1"
         aria-label={isRunning ? 'Pause' : 'Start timer'}
       >
         {isRunning ? 'Pause' : 'Start'}
@@ -43,7 +43,7 @@ const Controls = ({ isRunning, start, pause, reset }: ControlsProps) => {
             reset();
           }
         }}
-        className="px-4 py-2 rounded-full bg-brand-blueMuted text-brand-text font-medium focus:ring-2 focus:ring-brand-greenMuted"
+        className="px-4 py-2 rounded-full bg-brand-blueMuted text-brand-text font-medium focus:ring-2 focus:ring-brand-greenMuted text-base min-w-[90px] mb-1"
         aria-label="Reset timer"
       >
         Reset

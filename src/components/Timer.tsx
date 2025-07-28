@@ -10,8 +10,7 @@ interface TimerProps {
 }
 
 const Timer: React.FC<TimerProps> = ({ minutes, seconds, progress, phase, status }) => {
-  // Responsive SVG size
-  const size = typeof window !== 'undefined' && window.innerWidth <= 550 ? 140 : 200;
+  const size = 200;
   const strokeWidth = 12;
   const radius = (size - strokeWidth) / 2;
   const circumference = 2 * Math.PI * radius;
@@ -22,7 +21,7 @@ const Timer: React.FC<TimerProps> = ({ minutes, seconds, progress, phase, status
 
   return (
     <div className="relative flex flex-col items-center justify-center space-y-4" aria-live="polite" aria-label="Timer">
-      <svg width={size} height={size} className="block timer-svg">
+      <svg width={size} height={size} className="block">
         <circle
           cx={size / 2}
           cy={size / 2}
@@ -50,7 +49,7 @@ const Timer: React.FC<TimerProps> = ({ minutes, seconds, progress, phase, status
       <div className="text-6xl font-mono tabular-nums" aria-label="Pozostały czas">
         {pad2(minutes)}:{pad2(seconds)}
       </div>
-      <div className="text-xl uppercase tracking-widest text-brand-greenMuted" aria-label="Status sesji">
+      <div className="text-xl uppercase tracking-widest text-brand-green" aria-label="Status sesji">
         {statusLabel}
       </div>
     </div>
