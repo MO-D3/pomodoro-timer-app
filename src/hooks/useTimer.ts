@@ -134,8 +134,8 @@ export function useTimer(options: TimerOptions, onComplete?: (phase: Phase) => v
   const status: TimerStatus = isRunning
     ? phase
     : remainingMs === (phase === 'work' ? initialWorkMs : initialBreakMs)
-    ? 'paused'
-    : 'paused';
+      ? 'paused'
+      : 'paused';
   // If status is ambiguous, just show phase or paused. Completed is not used as we auto switch
 
   return {

@@ -11,7 +11,12 @@ interface PresetSelectorProps {
   includeSettings?: boolean;
 }
 
-const PresetSelector: React.FC<PresetSelectorProps> = ({ presets, selectedIndex, onSelect, includeSettings = false }) => {
+const PresetSelector: React.FC<PresetSelectorProps> = ({
+  presets,
+  selectedIndex,
+  onSelect,
+  includeSettings = false,
+}) => {
   const items = includeSettings ? [...presets, { label: 'Ustawienia', work: 0, break: 0 }] : presets;
   return (
     <div role="tablist" aria-label="Wybór presetu" className="flex space-x-2">

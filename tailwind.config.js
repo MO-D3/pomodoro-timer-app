@@ -1,9 +1,6 @@
 /** @type {import('tailwindcss').Config} */
 module.exports = {
-  content: [
-    './index.html',
-    './src/**/*.{js,ts,jsx,tsx}'
-  ],
+  content: ['./index.html', './src/**/*.{js,ts,jsx,tsx}'],
   darkMode: 'class',
   theme: {
     extend: {
@@ -15,14 +12,14 @@ module.exports = {
           greenMuted: '#2C524D',
           bg: '#0F1C24',
           surface: '#13232D',
-          text: '#E6F0F3'
-        }
+          text: '#E6F0F3',
+        },
       },
       fontFamily: {
         sans: ['Inter', 'sans-serif'],
-        mono: ['Menlo', 'monospace']
-      }
-    }
+        mono: ['Menlo', 'monospace'],
+      },
+    },
   },
-  plugins: []
+  plugins: [],
 };

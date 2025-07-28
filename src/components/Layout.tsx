@@ -14,11 +14,7 @@ const Layout = ({ children }: PropsWithChildren) => {
         </div>
       </header>
       {/* Add padding top to main to prevent content hiding under navbar */}
-      <main
-        role="main"
-        id="main"
-        className="flex-1 p-4 flex flex-col items-center pt-8 sm:pt-8"
-      >
+      <main role="main" id="main" className="flex-1 p-4 flex flex-col items-center pt-8 sm:pt-8">
         {children}
       </main>
       <footer role="contentinfo" className="p-4 text-center text-sm text-brand-greenMuted bg-brand-surface mt-auto">

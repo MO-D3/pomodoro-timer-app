@@ -42,16 +42,7 @@ const Home: React.FC = () => {
   const endAudio = useAudio(endSound, volume, sounds);
 
   // Timer hook
-  const {
-    minutes,
-    seconds,
-    progress,
-    phase,
-    isRunning,
-    start,
-    pause,
-    reset,
-  } = useTimer(
+  const { minutes, seconds, progress, phase, isRunning, start, pause, reset } = useTimer(
     {
       workMinutes: PRESETS[selectedIndex]?.work ?? 25,
       breakMinutes: PRESETS[selectedIndex]?.break ?? 5,
@@ -95,7 +86,13 @@ const Home: React.FC = () => {
       />
       {!onSettings && (
         <div id="timer-panel" role="tabpanel" className="mt-6 flex flex-col items-center">
-          <Timer minutes={minutes} seconds={seconds} progress={progress} phase={phase} status={isRunning ? phase : 'paused'} />
+          <Timer
+            minutes={minutes}
+            seconds={seconds}
+            progress={progress}
+            phase={phase}
+            status={isRunning ? phase : 'paused'}
+          />
           <Controls isRunning={isRunning} start={start} pause={pause} reset={reset} />
           <StatsToday sessions={stats.sessions} workMinutes={stats.workMinutes} />
         </div>
