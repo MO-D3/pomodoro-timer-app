@@ -21,7 +21,7 @@ export class PomodoroPage {
     this.startButton = page.getByRole('button', { name: /start/i });
     this.pauseButton = page.getByRole('button', { name: /pause/i });
     this.resetButton = page.getByRole('button', { name: /reset/i });
-    this.statsHeading = page.getByRole('heading', { name: /dzisiejsze statystyki/i });
+    this.statsHeading = page.getByRole('heading', { name: /today's stats/i });
     this.contentInfo = page.getByRole('contentinfo');
   }
 
@@ -41,14 +41,15 @@ export class PomodoroPage {
   }
 
   async isPaused() {
-    return this.timerPanel.locator('text=Paused').isVisible();
+    return this.timerPanel.locator('[aria-label="Status sesji"]', { hasText: 'Paused' }).isVisible();
   }
 
   async isWork() {
-    return this.timerPanel.locator('text=Work').isVisible();
+    // Only match the status label, not summary text
+    return this.timerPanel.locator('[aria-label="Status sesji"]', { hasText: 'Work' }).isVisible();
   }
 
   async isBreak() {
-    return this.timerPanel.locator('text=Break').isVisible();
+    return this.timerPanel.locator('[aria-label="Status sesji"]', { hasText: 'Break' }).isVisible();
   }
 }

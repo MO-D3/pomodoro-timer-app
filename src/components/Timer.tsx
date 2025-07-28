@@ -43,7 +43,7 @@ const Timer: React.FC<TimerProps> = ({ minutes, seconds, progress, phase, status
           strokeDasharray={circumference}
           strokeDashoffset={offset}
           strokeLinecap="round"
-          style={{ transition: 'stroke-dashoffset 0.2s linear' }}
+          style={{ transition: progress === 1 || progress === 0 ? 'none' : 'stroke-dashoffset 0.2s linear' }}
         />
       </svg>
       <div className="text-6xl font-mono tabular-nums" aria-label="Time left">

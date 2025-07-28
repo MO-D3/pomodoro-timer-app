@@ -13,6 +13,8 @@ export function useAudio(src: string, volume: number, enabled: boolean) {
     audioRef.current = audio;
     return () => {
       audio.pause();
+      audio.currentTime = 0;
+      audioRef.current = null;
     };
   }, [src]);
 

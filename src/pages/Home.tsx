@@ -9,6 +9,7 @@ import { useTimer, Phase } from '../hooks/useTimer';
 import { useLocalStorage } from '../hooks/useLocalStorage';
 import { useNotifications } from '../hooks/useNotifications';
 import { useAudio } from '../hooks/useAudio';
+import { useLofiMusic } from '../hooks/useLofiMusic';
 // Import audio files via Vite so paths are resolved at build time
 import endSound from '../assets/sounds/end.mp3';
 
@@ -24,6 +25,13 @@ const PRESETS = [
 const Home: React.FC = () => {
   // Selected tab index; defaults do 25/5 (teraz index 2)
   const [selectedIndex, setSelectedIndex] = useState(2);
+
+  // When preset changes, reset timer and music
+  const handlePresetChange = (index: number) => {
+    setSelectedIndex(index);
+    reset();
+    lofiMusic.pause();
+  };
   // Preferences stored in localStorage
   const [autoStartBreak, setAutoStartBreak] = useLocalStorage('autoStartBreak', false);
   const [autoStartWork, setAutoStartWork] = useLocalStorage('autoStartWork', false);
@@ -31,6 +39,7 @@ const Home: React.FC = () => {
   const [volume, setVolume] = useLocalStorage('volume', 70);
   const [notificationsEnabled, setNotificationsEnabled] = useLocalStorage('notifications', false);
   const [vibrations, setVibrations] = useLocalStorage('vibrations', false);
+  const [music, setMusic] = useLocalStorage('music', true);
   // Stats per day stored in localStorage
   const todayKey = `stats-${new Date().toISOString().slice(0, 10)}`;
   const [stats, setStats] = useLocalStorage(todayKey, { sessions: 0, workMinutes: 0 });
@@ -38,8 +47,9 @@ const Home: React.FC = () => {
   // Notifications
   const { permission, requestPermission, send } = useNotifications();
 
-  // Audio hooks for end and tick; we might only use end
+  // Audio hooks for end and lofi music
   const endAudio = useAudio(endSound, volume, sounds);
+  const lofiMusic = useLofiMusic(volume, music);
 
   // Timer hook
   const { minutes, seconds, progress, phase, isRunning, start, pause, reset } = useTimer(
@@ -64,16 +74,38 @@ const Home: React.FC = () => {
       }
       // Update stats only when a work session completes
       if (completedPhase === 'work') {
-        setStats((prev) => ({
-          sessions: prev.sessions + 1,
-          workMinutes: prev.workMinutes + PRESETS[selectedIndex].work,
-        }));
+        setStats((prev) => {
+          const newSessions = prev.sessions + 1;
+          const newWorkMinutes = prev.workMinutes + PRESETS[selectedIndex].work;
+          if (prev.sessions === newSessions && prev.workMinutes === newWorkMinutes) {
+            return prev;
+          }
+          return {
+            sessions: newSessions,
+            workMinutes: newWorkMinutes,
+          };
+        });
       }
     }
   );
 
   // Determine if we are on settings tab
   const onSettings = selectedIndex >= PRESETS.length;
+
+  // Music control handlers
+  const handleStart = () => {
+    if (!isRunning) {
+      reset(); // Always start from preset's initial value
+      if (music) lofiMusic.play();
+      start();
+    }
+  };
+  const handlePause = () => {
+    if (isRunning) {
+      if (music) lofiMusic.pause();
+      pause();
+    }
+  };
 
   return (
     <Layout>
@@ -82,7 +114,7 @@ const Home: React.FC = () => {
         presets={PRESETS}
         includeSettings={true}
         selectedIndex={selectedIndex}
-        onSelect={(index) => setSelectedIndex(index)}
+        onSelect={handlePresetChange}
       />
       {!onSettings && (
         <div id="timer-panel" role="tabpanel" className="mt-6 flex flex-col items-center">
@@ -93,7 +125,7 @@ const Home: React.FC = () => {
             phase={phase}
             status={isRunning ? phase : 'paused'}
           />
-          <Controls isRunning={isRunning} start={start} pause={pause} reset={reset} />
+          <Controls isRunning={isRunning} start={handleStart} pause={handlePause} reset={reset} />
           <StatsToday sessions={stats.sessions} workMinutes={stats.workMinutes} />
         </div>
       )}
@@ -112,6 +144,8 @@ const Home: React.FC = () => {
           requestNotificationPermission={requestPermission}
           vibrations={vibrations}
           setVibrations={setVibrations}
+          music={music}
+          setMusic={setMusic}
         />
       )}
     </Layout>

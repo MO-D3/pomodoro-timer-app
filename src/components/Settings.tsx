@@ -12,6 +12,8 @@ interface SettingsProps {
   requestNotificationPermission: () => void;
   vibrations: boolean;
   setVibrations: (v: boolean) => void;
+  music: boolean;
+  setMusic: (v: boolean) => void;
 }
 
 const Settings: React.FC<SettingsProps> = ({
@@ -28,6 +30,8 @@ const Settings: React.FC<SettingsProps> = ({
   requestNotificationPermission,
   vibrations,
   setVibrations,
+  music,
+  setMusic,
 }) => {
   return (
     <div id="settings-panel" role="tabpanel" className="mt-6 space-y-6">
@@ -35,27 +39,39 @@ const Settings: React.FC<SettingsProps> = ({
       <div className="space-y-4">
         {/* Auto start break */}
         <label className="flex items-center justify-between">
-          <span>Auto-start przerw</span>
+          <span>Breaks auto-start</span>
           <input
             type="checkbox"
             checked={autoStartBreak}
             onChange={(e) => setAutoStartBreak(e.target.checked)}
             className="h-5 w-5"
-            aria-label="Auto-start przerw"
+            aria-label="Breaks Auto-start"
           />
         </label>
         {/* Auto start work */}
         <label className="flex items-center justify-between">
-          <span>Auto-start pracy</span>
+          <span>Work auto-start</span>
           <input
             type="checkbox"
             checked={autoStartWork}
             onChange={(e) => setAutoStartWork(e.target.checked)}
             className="h-5 w-5"
-            aria-label="Auto-start pracy"
+            aria-label="Work Auto-start"
           />
         </label>
         {/* Sounds */}
+        {/* Music */}
+        <label className="flex items-center justify-between" htmlFor="music-toggle">
+          <span id="music-label">With music</span>
+          <input
+            id="music-toggle"
+            type="checkbox"
+            checked={music}
+            onChange={(e) => setMusic(e.target.checked)}
+            className="h-5 w-5"
+            aria-labelledby="music-label"
+          />
+        </label>
         <label className="flex items-center justify-between" htmlFor="sounds-toggle">
           <span id="sounds-label">Sounds</span>
           <input
