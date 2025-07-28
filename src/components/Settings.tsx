@@ -31,7 +31,7 @@ const Settings: React.FC<SettingsProps> = ({
 }) => {
   return (
     <div id="settings-panel" role="tabpanel" className="mt-6 space-y-6">
-      <h2 className="text-2xl font-semibold">Ustawienia</h2>
+      <h2 className="text-2xl font-semibold">Settings</h2>
       <div className="space-y-4">
         {/* Auto start break */}
         <label className="flex items-center justify-between">
@@ -69,7 +69,9 @@ const Settings: React.FC<SettingsProps> = ({
         </label>
         {/* Volume */}
         <label className="flex items-center justify-between" htmlFor="volume-range">
-          <span id="volume-label">Volume: {volume}%</span>
+          <span id="volume-label" className="inline-block min-w-[80px]">
+            Volume: {volume}%
+          </span>
           <input
             id="volume-range"
             type="range"

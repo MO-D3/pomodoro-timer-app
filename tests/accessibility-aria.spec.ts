@@ -14,7 +14,7 @@ test.describe('ARIA structure', () => {
     await expect(pomodoro.tablist.getByRole('tab', { name: /25\/5/ })).toBeVisible();
     await expect(pomodoro.tablist.getByRole('tab', { name: /35\/5/ })).toBeVisible();
     await expect(pomodoro.tablist.getByRole('tab', { name: /45\/5/ })).toBeVisible();
-    await expect(pomodoro.tablist.getByRole('tab', { name: /ustawienia/i })).toBeVisible();
+    await expect(pomodoro.tablist.getByRole('tab', { name: /Settings/i })).toBeVisible();
     await expect(pomodoro.timerPanel).toBeVisible();
     await expect(pomodoro.startButton).toBeVisible();
     await expect(pomodoro.resetButton).toBeVisible();
@@ -35,8 +35,8 @@ test.describe('ARIA structure', () => {
   test('settings view is accessible and visible', async ({ page }) => {
     const pomodoro = new PomodoroPage(page);
     await pomodoro.goto();
-    await pomodoro.selectPreset('Ustawienia');
-    await expect(pomodoro.timerPanel).toContainText(/ustawienia/i);
+    await pomodoro.selectPreset('Settings');
+    await expect(pomodoro.timerPanel).toContainText(/Settings/i);
     await expect(page.getByLabel('Sounds')).toBeVisible();
     await expect(page.getByLabel('Volume')).toBeVisible();
     await expect(page.getByLabel('Notifications')).toBeVisible();
