@@ -2,7 +2,7 @@
   "name": "pomodoro with me",
   "short_name": "pomodoro",
   "description": "Minimalistyczny timer pomodoro bez kont i bez chmury.",
-  "lang": "pl",
+  "lang": "en",
   "icons": [
     {
       "src": "/logo.png",
