@@ -6,10 +6,10 @@ interface StatsTodayProps {
 const StatsToday: React.FC<StatsTodayProps> = ({ sessions, workMinutes }) => {
   return (
     <div
-      className="mt-6 border border-brand-blueMuted rounded-xl p-4 bg-brand-surface text-brand-text"
+      className="mt-2 border border-brand-blueMuted rounded-xl p-2 bg-brand-surface text-brand-text w-full max-w-xs mx-auto"
       role="complementary"
     >
-      <h2 className="text-xl font-semibold mb-2">Dzisiejsze statystyki</h2>
+      <h2 className="text-xl font-semibold mb-1">Dzisiejsze statystyki</h2>
       <p>
         Liczba zakończonych pomodoro: <strong>{sessions}</strong>
       </p>

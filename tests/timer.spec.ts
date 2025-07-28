@@ -17,7 +17,7 @@ test.describe('Timer controls', () => {
 });
 
 test.describe('Timer 10/5 test preset', () => {
-  test.only('should count down 10 seconds work, then 5 seconds break', async ({ page }) => {
+  test('should count down 10 seconds work, then 5 seconds break', async ({ page }) => {
     const pomodoro = new PomodoroPage(page);
     await pomodoro.goto();
     await pomodoro.selectPreset('10/5');
