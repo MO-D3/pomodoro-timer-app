@@ -25,8 +25,17 @@ export class PomodoroPage {
     this.contentInfo = page.getByRole('contentinfo');
   }
 
-  async goto() {
-    await this.page.goto('/');
+  async goto(query: string = '') {
+    await this.page.goto('/' + query);
+  }
+  async setCustomWork(value: number) {
+    const input = this.page.getByLabel(/Focus Time/i);
+    await input.fill(String(value));
+  }
+
+  async setCustomBreak(value: number) {
+    const input = this.page.getByLabel(/Break Time/i);
+    await input.fill(String(value));
   }
 
   async selectPreset(label: string) {

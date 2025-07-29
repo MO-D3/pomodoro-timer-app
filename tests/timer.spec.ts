@@ -16,11 +16,14 @@ test.describe('Timer controls', () => {
   });
 });
 
-test.describe('Timer 10/5 test preset', () => {
+test.describe('Timer Custom 10/5 test (test mode)', () => {
   test('should count down 10 seconds work, then 5 seconds break', async ({ page }) => {
     const pomodoro = new PomodoroPage(page);
-    await pomodoro.goto();
-    await pomodoro.selectPreset('10/5');
+    await pomodoro.goto('?test=1');
+    await pomodoro.selectPreset('Custom');
+    // Set custom times
+    await pomodoro.setCustomWork(10);
+    await pomodoro.setCustomBreak(5);
     await expect.poll(async () => await pomodoro.getTimerText()).toContain('00:10');
     await pomodoro.startButton.click();
     await page.waitForTimeout(11000);

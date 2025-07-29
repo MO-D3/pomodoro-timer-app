@@ -11,7 +11,6 @@ const Layout: React.FC<React.PropsWithChildren> = ({ children }) => {
       >
         <div className="flex flex-col items-center justify-center w-full pointer-events-none select-none">
           <span className="text-5xl font-bold text-brand-text text-center mt-2 mb-2">pomodoro with me</span>
-          <span className="text-base italic text-brand-green mt-1 text-center">Focus gently</span>
         </div>
       </header>
       {/* Add padding top to main to prevent content hiding under navbar */}
