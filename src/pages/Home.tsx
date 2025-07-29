@@ -134,7 +134,7 @@ const Home: React.FC = () => {
       />
       {/* Custom inputs for Custom preset */}
       {selectedIndex === 0 && (
-        <div className="flex flex-row items-center justify-center mt-4 mb-2 w-full gap-8">
+        <div className="flex flex-row items-center justify-center mt-4 mb-2 w-full gap-8 custom-inputs-responsive">
           {/* Work/Break Inputs */}
           <div className="flex flex-row items-end gap-4">
             <label className="flex flex-col items-center">
@@ -167,7 +167,7 @@ const Home: React.FC = () => {
             </label>
           </div>
           {/* Play music */}
-          <div className="flex flex-col items-center ml-8">
+          <div className="flex flex-col items-center ml-8 custom-music-col">
             <span className="flex items-center gap-2 text-brand-green font-medium mb-2"><FaMusic /> Play music</span>
             <button
               aria-label={musicPlaying ? 'Pause music' : 'Play music'}
