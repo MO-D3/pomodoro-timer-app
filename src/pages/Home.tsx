@@ -1,3 +1,5 @@
+// Detect test mode via ?test=1 in the URL
+const isTestMode = typeof window !== 'undefined' && window.location.search.includes('test=1');
 import * as React from 'react';
 import { useState } from 'react';
 import Layout from '../components/Layout';
@@ -16,7 +18,7 @@ import endSound from '../assets/sounds/end.mp3';
 
 // Define the presets for work/break durations
 const PRESETS = [
-  { label: '10/5', work: 0.1667, break: 0.0834 }, // 10 sekund pracy, 5 sekund przerwy
+  { label: 'Custom', work: 25, break: 5 },
   { label: '15/5', work: 15, break: 5 },
   { label: '25/5', work: 25, break: 5 },
   { label: '35/5', work: 35, break: 5 },
@@ -24,8 +26,11 @@ const PRESETS = [
 ];
 
 const Home: React.FC = () => {
-  // Selected tab index; defaults do 25/5 (teraz index 2)
+  // Selected tab index; defaults to 25/5 (now index 2)
   const [selectedIndex, setSelectedIndex] = useState(2);
+  // Custom times state
+  const [customWork, setCustomWork] = useState(isTestMode ? 1 : 25);
+  const [customBreak, setCustomBreak] = useState(isTestMode ? 1 : 5);
 
   // When preset changes, reset timer and music
   const handlePresetChange = (index: number) => {
@@ -56,8 +61,14 @@ const Home: React.FC = () => {
   // Timer hook
   const { minutes, seconds, progress, phase, isRunning, start, pause, reset } = useTimer(
     {
-      workMinutes: PRESETS[selectedIndex]?.work ?? 25,
-      breakMinutes: PRESETS[selectedIndex]?.break ?? 5,
+      workMinutes:
+        selectedIndex === 0
+          ? (isTestMode ? customWork / 60 : customWork)
+          : PRESETS[selectedIndex]?.work ?? 25,
+      breakMinutes:
+        selectedIndex === 0
+          ? (isTestMode ? customBreak / 60 : customBreak)
+          : PRESETS[selectedIndex]?.break ?? 5,
       autoStartBreak,
       autoStartWork,
     },
@@ -118,6 +129,39 @@ const Home: React.FC = () => {
         selectedIndex={selectedIndex}
         onSelect={handlePresetChange}
       />
+      {/* Custom inputs for Custom preset */}
+      {selectedIndex === 0 && (
+        <div className="flex flex-col items-center justify-center mt-4 mb-2">
+          <label className="mb-2 flex flex-col items-center">
+            <span className="mb-1 font-medium">Focus Time ({isTestMode ? 'sec' : 'min'})</span>
+            <input
+              type="number"
+              min={1}
+              max={isTestMode ? 600 : 120}
+              step={1}
+              value={customWork}
+              onChange={e => setCustomWork(Math.max(1, Math.min(isTestMode ? 600 : 120, Math.floor(Number(e.target.value)))))}
+              className="text-center border rounded px-2 py-1 w-[100px] text-black"
+              inputMode="numeric"
+              pattern="[0-9]*"
+            />
+          </label>
+          <label className="mb-2 flex flex-col items-center">
+            <span className="mb-1 font-medium">Break Time ({isTestMode ? 'sec' : 'min'})</span>
+            <input
+              type="number"
+              min={1}
+              max={isTestMode ? 600 : 120}
+              step={1}
+              value={customBreak}
+              onChange={e => setCustomBreak(Math.max(1, Math.min(isTestMode ? 600 : 120, Math.floor(Number(e.target.value)))))}
+              className="text-center border rounded px-2 py-1 w-[100px] text-black"
+              inputMode="numeric"
+              pattern="[0-9]*"
+            />
+          </label>
+        </div>
+      )}
       {!onSettings && (
         <div id="timer-panel" role="tabpanel" className="mt-6 flex flex-col items-center">
           <Timer
