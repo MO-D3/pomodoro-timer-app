@@ -13,6 +13,7 @@ import { useLocalStorage } from '../hooks/useLocalStorage';
 import { useNotifications } from '../hooks/useNotifications';
 import { useAudio } from '../hooks/useAudio';
 import { useLofiMusic } from '../hooks/useLofiMusic';
+import { FaPlay, FaPause, FaMusic } from 'react-icons/fa';
 // Import audio files via Vite so paths are resolved at build time
 import endSound from '../assets/sounds/end.mp3';
 
@@ -31,6 +32,8 @@ const Home: React.FC = () => {
   // Custom times state
   const [customWork, setCustomWork] = useState(isTestMode ? 1 : 25);
   const [customBreak, setCustomBreak] = useState(isTestMode ? 1 : 5);
+  // Music playing state for icon toggle
+  const [musicPlaying, setMusicPlaying] = useState(false);
 
   // When preset changes, reset timer and music
   const handlePresetChange = (index: number) => {
@@ -131,35 +134,57 @@ const Home: React.FC = () => {
       />
       {/* Custom inputs for Custom preset */}
       {selectedIndex === 0 && (
-        <div className="flex flex-col items-center justify-center mt-4 mb-2">
-          <label className="mb-2 flex flex-col items-center">
-            <span className="mb-1 font-medium">Focus Time ({isTestMode ? 'sec' : 'min'})</span>
-            <input
-              type="number"
-              min={1}
-              max={isTestMode ? 600 : 120}
-              step={1}
-              value={customWork}
-              onChange={e => setCustomWork(Math.max(1, Math.min(isTestMode ? 600 : 120, Math.floor(Number(e.target.value)))))}
-              className="text-center border rounded px-2 py-1 w-[100px] text-black"
-              inputMode="numeric"
-              pattern="[0-9]*"
-            />
-          </label>
-          <label className="mb-2 flex flex-col items-center">
-            <span className="mb-1 font-medium">Break Time ({isTestMode ? 'sec' : 'min'})</span>
-            <input
-              type="number"
-              min={1}
-              max={isTestMode ? 600 : 120}
-              step={1}
-              value={customBreak}
-              onChange={e => setCustomBreak(Math.max(1, Math.min(isTestMode ? 600 : 120, Math.floor(Number(e.target.value)))))}
-              className="text-center border rounded px-2 py-1 w-[100px] text-black"
-              inputMode="numeric"
-              pattern="[0-9]*"
-            />
-          </label>
+        <div className="flex flex-row items-center justify-center mt-4 mb-2 w-full gap-8">
+          {/* Work/Break Inputs */}
+          <div className="flex flex-row items-end gap-4">
+            <label className="flex flex-col items-center">
+              <span className="mb-1 font-medium">Focus Time ({isTestMode ? 'sec' : 'min'})</span>
+              <input
+                type="number"
+                min={1}
+                max={isTestMode ? 600 : 120}
+                step={1}
+                value={customWork}
+                onChange={e => setCustomWork(Math.max(1, Math.min(isTestMode ? 600 : 120, Math.floor(Number(e.target.value)))))}
+                className="text-center border rounded px-2 py-1 w-[100px] text-black"
+                inputMode="numeric"
+                pattern="[0-9]*"
+              />
+            </label>
+            <label className="flex flex-col items-center">
+              <span className="mb-1 font-medium">Break Time ({isTestMode ? 'sec' : 'min'})</span>
+              <input
+                type="number"
+                min={1}
+                max={isTestMode ? 600 : 120}
+                step={1}
+                value={customBreak}
+                onChange={e => setCustomBreak(Math.max(1, Math.min(isTestMode ? 600 : 120, Math.floor(Number(e.target.value)))))}
+                className="text-center border rounded px-2 py-1 w-[100px] text-black"
+                inputMode="numeric"
+                pattern="[0-9]*"
+              />
+            </label>
+          </div>
+          {/* Play music */}
+          <div className="flex flex-col items-center ml-8">
+            <span className="flex items-center gap-2 text-brand-green font-medium mb-2"><FaMusic /> Play music</span>
+            <button
+              aria-label={musicPlaying ? 'Pause music' : 'Play music'}
+              className="text-brand-green hover:text-brand-greenMuted text-2xl focus:outline-none"
+              onClick={async () => {
+                if (musicPlaying) {
+                  lofiMusic.pause();
+                  setMusicPlaying(false);
+                } else {
+                  await lofiMusic.play();
+                  setMusicPlaying(true);
+                }
+              }}
+            >
+              {musicPlaying ? <FaPause /> : <FaPlay />}
+            </button>
+          </div>
         </div>
       )}
       {!onSettings && (
