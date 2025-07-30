@@ -41,7 +41,7 @@ const Home: React.FC = () => {
     reset();
     lofiMusic.pause();
     setMusicPlaying(false); // Always show play icon after preset change
-    setMusic(false);
+    // setMusic(false); // removed, not needed
   };
   // Preferences stored in localStorage
   const [autoStartBreak, setAutoStartBreak] = useLocalStorage('autoStartBreak', false);
@@ -50,7 +50,10 @@ const Home: React.FC = () => {
   const [volume, setVolume] = useLocalStorage('volume', 70);
   const [notificationsEnabled, setNotificationsEnabled] = useLocalStorage('notifications', false);
   const [vibrations, setVibrations] = useLocalStorage('vibrations', false);
-  const [music, setMusic] = useLocalStorage('music', true);
+  // Music is now controlled only by Play/Pause button, not settings
+  // Remove all traces of setMusic/music from settings and state
+  // const [music, setMusic] = useLocalStorage('music', true);
+  const music = true;
   // Stats per day stored in localStorage
   const todayKey = `stats-${new Date().toISOString().slice(0, 10)}`;
   const [stats, setStats] = useLocalStorage(todayKey, { sessions: 0, workMinutes: 0 });
@@ -94,7 +97,11 @@ const Home: React.FC = () => {
       if (completedPhase === 'work') {
         setStats((prev) => {
           const newSessions = prev.sessions + 1;
-          const newWorkMinutes = prev.workMinutes + PRESETS[selectedIndex].work;
+          // Use correct work minutes for custom preset
+          const workMinutesToAdd = selectedIndex === 0
+            ? (isTestMode ? customWork / 60 : customWork)
+            : PRESETS[selectedIndex].work;
+          const newWorkMinutes = prev.workMinutes + workMinutesToAdd;
           if (prev.sessions === newSessions && prev.workMinutes === newWorkMinutes) {
             return prev;
           }
@@ -113,16 +120,14 @@ const Home: React.FC = () => {
   // Music control handlers
   const handleStart = () => {
     if (!isRunning) {
-      if (music) {
-        lofiMusic.play();
-        setMusicPlaying(true);
-      }
+      lofiMusic.play();
+      setMusicPlaying(true);
       start();
     }
   };
   const handlePause = () => {
     if (isRunning) {
-      if (music) lofiMusic.pause();
+      lofiMusic.pause();
       pause();
     }
   };
@@ -173,7 +178,11 @@ const Home: React.FC = () => {
                 max={isTestMode ? 600 : 120}
                 step={1}
                 value={customWork}
-                onChange={e => setCustomWork(Math.max(1, Math.min(isTestMode ? 600 : 120, Math.floor(Number(e.target.value)))))}
+                onChange={e => {
+                  const val = Math.max(1, Math.min(isTestMode ? 600 : 120, Math.floor(Number(e.target.value))));
+                  setCustomWork(val);
+                  reset();
+                }}
                 className="text-center border rounded px-2 py-1 w-[100px] text-black"
                 inputMode="numeric"
                 pattern="[0-9]*"
@@ -187,7 +196,11 @@ const Home: React.FC = () => {
                 max={isTestMode ? 600 : 120}
                 step={1}
                 value={customBreak}
-                onChange={e => setCustomBreak(Math.max(1, Math.min(isTestMode ? 600 : 120, Math.floor(Number(e.target.value)))))}
+                onChange={e => {
+                  const val = Math.max(1, Math.min(isTestMode ? 600 : 120, Math.floor(Number(e.target.value))));
+                  setCustomBreak(val);
+                  reset();
+                }}
                 className="text-center border rounded px-2 py-1 w-[100px] text-black"
                 inputMode="numeric"
                 pattern="[0-9]*"
@@ -199,7 +212,7 @@ const Home: React.FC = () => {
 
       {/* Timer and music controls */}
       {!onSettings && (
-        <div className="flex flex-col items-center">
+        <div id="timer-panel" role="tabpanel" className="flex flex-col items-center">
           <Timer
             minutes={minutes}
             seconds={seconds}
@@ -216,11 +229,9 @@ const Home: React.FC = () => {
               if (musicPlaying) {
                 lofiMusic.pause();
                 setMusicPlaying(false);
-                setMusic(false);
               } else {
                 await lofiMusic.play();
                 setMusicPlaying(true);
-                setMusic(true);
               }
             }}
           >
@@ -254,8 +265,6 @@ const Home: React.FC = () => {
           requestNotificationPermission={requestPermission}
           vibrations={vibrations}
           setVibrations={setVibrations}
-          music={music}
-          setMusic={setMusic}
         />
       )}
     </Layout>
