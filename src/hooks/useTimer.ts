@@ -36,6 +36,11 @@ export function useTimer(options: TimerOptions, onComplete?: (phase: Phase) => v
 
   // Reset when work/break minutes change
   useEffect(() => {
+    // Always clear interval on timer reset (preset/custom change)
+    if (intervalRef.current !== null) {
+      clearInterval(intervalRef.current);
+      intervalRef.current = null;
+    }
     setPhase('work');
     setRemainingMs(initialWorkMs);
     setRunning(false);

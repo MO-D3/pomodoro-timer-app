@@ -40,6 +40,8 @@ const Home: React.FC = () => {
     setSelectedIndex(index);
     reset();
     lofiMusic.pause();
+    setMusicPlaying(false); // Always show play icon after preset change
+    setMusic(false);
   };
   // Preferences stored in localStorage
   const [autoStartBreak, setAutoStartBreak] = useLocalStorage('autoStartBreak', false);
@@ -111,8 +113,10 @@ const Home: React.FC = () => {
   // Music control handlers
   const handleStart = () => {
     if (!isRunning) {
-      reset(); // Always start from preset's initial value
-      if (music) lofiMusic.play();
+      if (music) {
+        lofiMusic.play();
+        setMusicPlaying(true);
+      }
       start();
     }
   };
@@ -126,7 +130,7 @@ const Home: React.FC = () => {
   return (
     <Layout>
       {/* LinkedIn link above Presets */}
-      <div className="flex items-center justify-center mt-6 mb-6">
+      <div className="flex items-center justify-center mt-2 mb-2" style={{ marginTop: '0.25rem', marginBottom: '0.25rem' }}>
         <a
           href="https://www.linkedin.com/in/michal-olesiak/"
           target="_blank"
@@ -156,8 +160,8 @@ const Home: React.FC = () => {
         selectedIndex={selectedIndex}
         onSelect={handlePresetChange}
       />
-      {/* Custom inputs for Custom preset */}
-      {selectedIndex === 0 && (
+      {/* Custom inputs for Custom preset - under presets, above timer */}
+      {selectedIndex === 0 && !onSettings && (
         <div className="flex flex-row items-center justify-center mt-4 mb-2 w-full gap-8 custom-inputs-responsive">
           {/* Work/Break Inputs */}
           <div className="flex flex-row items-end gap-4">
@@ -190,29 +194,12 @@ const Home: React.FC = () => {
               />
             </label>
           </div>
-          {/* Play music */}
-          <div className="flex flex-col items-center ml-8 custom-music-col">
-            <span className="flex items-center gap-2 text-brand-green font-medium mb-2"><FaMusic /> Play music</span>
-            <button
-              aria-label={musicPlaying ? 'Pause music' : 'Play music'}
-              className="text-brand-green hover:text-brand-greenMuted text-2xl focus:outline-none"
-              onClick={async () => {
-                if (musicPlaying) {
-                  lofiMusic.pause();
-                  setMusicPlaying(false);
-                } else {
-                  await lofiMusic.play();
-                  setMusicPlaying(true);
-                }
-              }}
-            >
-              {musicPlaying ? <FaPause /> : <FaPlay />}
-            </button>
-          </div>
         </div>
       )}
+
+      {/* Timer and music controls */}
       {!onSettings && (
-        <div id="timer-panel" role="tabpanel" className="mt-6 flex flex-col items-center">
+        <div className="flex flex-col items-center">
           <Timer
             minutes={minutes}
             seconds={seconds}
@@ -220,10 +207,38 @@ const Home: React.FC = () => {
             phase={phase}
             status={isRunning ? phase : 'paused'}
           />
+          <button
+            aria-label={musicPlaying ? 'Pause music' : 'Play music'}
+            className="flex items-center gap-2 text-brand-green hover:text-brand-greenMuted font-medium text-2xl focus:outline-none mt-2 mb-2"
+            style={{ border: 'none', background: 'none', padding: 0, cursor: 'pointer' }}
+            onClick={async () => {
+              // Toggle both music state and menu setting
+              if (musicPlaying) {
+                lofiMusic.pause();
+                setMusicPlaying(false);
+                setMusic(false);
+              } else {
+                await lofiMusic.play();
+                setMusicPlaying(true);
+                setMusic(true);
+              }
+            }}
+          >
+            <span>Play music</span>
+            {musicPlaying ? (
+              <FaPause style={{ verticalAlign: 'middle' }} />
+            ) : (
+              <FaPlay style={{ verticalAlign: 'middle' }} />
+            )}
+          </button>
           <Controls isRunning={isRunning} start={handleStart} pause={handlePause} reset={reset} />
           <StatsToday sessions={stats.sessions} workMinutes={stats.workMinutes} />
         </div>
       )}
+
+      {/* ...music button now handled in timer panel above... */}
+      
+      {/* ...timer panel now handled above with custom inputs beside timer... */}
       {onSettings && (
         <Settings
           autoStartBreak={autoStartBreak}
