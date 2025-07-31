@@ -26,12 +26,21 @@ const PRESETS = [
   { label: '45/5', work: 45, break: 5 },
 ];
 
+// Helpers: clamp to range and parse positive ints, allowing empty input
+const clamp = (n: number, min: number, max: number) => Math.min(max, Math.max(min, n));
+const parsePositiveInt = (s: string): number | null => {
+  if (s.trim() === '') return null; // allow empty while typing
+  const n = Number(s);
+  if (!Number.isFinite(n)) return null;
+  return Math.floor(Math.abs(n));
+};
+
 const Home: React.FC = () => {
   // Selected tab index; defaults to 25/5 (now index 2)
   const [selectedIndex, setSelectedIndex] = useState(2);
   // Custom times state
-  const [customWork, setCustomWork] = useState(isTestMode ? 1 : 25);
-  const [customBreak, setCustomBreak] = useState(isTestMode ? 1 : 5);
+  const [customWorkStr, setCustomWorkStr] = useState(isTestMode ? '1' : '25');
+  const [customBreakStr, setCustomBreakStr] = useState(isTestMode ? '1' : '5');
   // Music playing state for icon toggle
   const [musicPlaying, setMusicPlaying] = useState(false);
 
@@ -66,16 +75,24 @@ const Home: React.FC = () => {
   const endAudio = useAudio(endSound, volume, sounds);
   const lofiMusic = useLofiMusic(volume, music);
 
+  // Derived numeric values (with clamping and defaults)
+  const MIN_UNIT = 1;
+  const MAX_UNIT = isTestMode ? 600 : 120;
+  const parsedWork = parsePositiveInt(customWorkStr);
+  const parsedBreak = parsePositiveInt(customBreakStr);
+  const effectiveWork = parsedWork !== null ? clamp(parsedWork, MIN_UNIT, MAX_UNIT) : (isTestMode ? 1 : 25);
+  const effectiveBreak = parsedBreak !== null ? clamp(parsedBreak, MIN_UNIT, MAX_UNIT) : (isTestMode ? 1 : 5);
+
   // Timer hook
   const { minutes, seconds, progress, phase, isRunning, start, pause, reset } = useTimer(
     {
       workMinutes:
         selectedIndex === 0
-          ? (isTestMode ? customWork / 60 : customWork)
+          ? (isTestMode ? effectiveWork / 60 : effectiveWork)
           : PRESETS[selectedIndex]?.work ?? 25,
       breakMinutes:
         selectedIndex === 0
-          ? (isTestMode ? customBreak / 60 : customBreak)
+          ? (isTestMode ? effectiveBreak / 60 : effectiveBreak)
           : PRESETS[selectedIndex]?.break ?? 5,
       autoStartBreak,
       autoStartWork,
@@ -99,7 +116,7 @@ const Home: React.FC = () => {
           const newSessions = prev.sessions + 1;
           // Use correct work minutes for custom preset
           const workMinutesToAdd = selectedIndex === 0
-            ? (isTestMode ? customWork / 60 : customWork)
+            ? (isTestMode ? effectiveWork / 60 : effectiveWork)
             : PRESETS[selectedIndex].work;
           const newWorkMinutes = prev.workMinutes + workMinutesToAdd;
           if (prev.sessions === newSessions && prev.workMinutes === newWorkMinutes) {
@@ -177,11 +194,21 @@ const Home: React.FC = () => {
                 min={1}
                 max={isTestMode ? 600 : 120}
                 step={1}
-                value={customWork}
+                value={customWorkStr}
                 onChange={e => {
-                  const val = Math.max(1, Math.min(isTestMode ? 600 : 120, Math.floor(Number(e.target.value))));
-                  setCustomWork(val);
-                  reset();
+                  const v = e.target.value;
+                  // allow empty or digits only while typing
+                  if (v === '' || /^[0-9]+$/.test(v)) {
+                    setCustomWorkStr(v);
+                  }
+                }}
+                onBlur={() => {
+                  // normalize to clamped positive value (defaults to 1/25)
+                  const next = String(effectiveWork);
+                  if (customWorkStr !== next) {
+                    setCustomWorkStr(next);
+                    reset();
+                  }
                 }}
                 className="text-center border rounded px-2 py-1 w-[100px] text-black"
                 inputMode="numeric"
@@ -195,11 +222,19 @@ const Home: React.FC = () => {
                 min={1}
                 max={isTestMode ? 600 : 120}
                 step={1}
-                value={customBreak}
+                value={customBreakStr}
                 onChange={e => {
-                  const val = Math.max(1, Math.min(isTestMode ? 600 : 120, Math.floor(Number(e.target.value))));
-                  setCustomBreak(val);
-                  reset();
+                  const v = e.target.value;
+                  if (v === '' || /^[0-9]+$/.test(v)) {
+                    setCustomBreakStr(v);
+                  }
+                }}
+                onBlur={() => {
+                  const next = String(effectiveBreak);
+                  if (customBreakStr !== next) {
+                    setCustomBreakStr(next);
+                    reset();
+                  }
                 }}
                 className="text-center border rounded px-2 py-1 w-[100px] text-black"
                 inputMode="numeric"
