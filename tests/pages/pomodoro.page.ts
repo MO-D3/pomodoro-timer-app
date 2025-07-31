@@ -27,7 +27,11 @@ export class PomodoroPage {
   }
 
   async goto(query: string = '') {
-    await this.page.goto('/' + query);
+    // Use relative navigation so Playwright baseURL can include a subpath (e.g., /<repo>/ on CI)
+    const path = query
+      ? (query.startsWith('/') ? `.${query}` : `./${query}`)
+      : './';
+    await this.page.goto(path);
   }
   async setCustomWork(value: number) {
     const input = this.page.getByLabel(/Focus Time/i);

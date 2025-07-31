@@ -1,5 +1,11 @@
 import { defineConfig, devices } from '@playwright/test';
 
+const isCI = !!process.env.CI;
+const repo = process.env.GITHUB_REPOSITORY?.split('/')[1] || '';
+const basePath = isCI && process.env.GITHUB_ACTIONS && repo ? `/${repo}/` : '/';
+const port = 5173;
+const previewURL = `http://localhost:${port}`;
+
 export default defineConfig({
   testDir: './tests',
   timeout: 30 * 1000,
@@ -9,10 +15,15 @@ export default defineConfig({
   reporter: 'list',
   fullyParallel: true,
   use: {
-    baseURL: 'http://localhost:5173',
+    baseURL: previewURL + basePath, // lokalnie "/"; w CI "/<repo>/"
     browserName: 'chromium',
     headless: true,
     viewport: { width: 1280, height: 720 },
+  },
+  webServer: {
+    command: `npm run preview -- --port=${port}`,
+    url: previewURL + basePath,
+    reuseExistingServer: !isCI,
   },
   projects: [
     {
