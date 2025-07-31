@@ -19,7 +19,8 @@ export class PomodoroPage {
     this.tablist = page.getByRole('tablist');
     this.timerPanel = page.getByRole('tabpanel');
     this.startButton = page.getByRole('button', { name: /start/i });
-    this.pauseButton = page.getByRole('button', { name: /pause/i });
+    // Use exact match for timer pause button to avoid music pause
+    this.pauseButton = page.getByRole('button', { name: /^Pause$/, exact: true });
     this.resetButton = page.getByRole('button', { name: /reset/i });
     this.statsHeading = page.getByRole('heading', { name: /today's stats/i });
     this.contentInfo = page.getByRole('contentinfo');

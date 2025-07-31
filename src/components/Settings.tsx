@@ -14,8 +14,6 @@ interface SettingsProps {
   requestNotificationPermission: () => void;
   vibrations: boolean;
   setVibrations: (v: boolean) => void;
-  music: boolean;
-  setMusic: (v: boolean) => void;
 }
 
 const Settings: React.FC<SettingsProps> = ({
@@ -32,8 +30,6 @@ const Settings: React.FC<SettingsProps> = ({
   requestNotificationPermission,
   vibrations,
   setVibrations,
-  music,
-  setMusic,
 }) => {
   return (
     <div id="settings-panel" role="tabpanel" className="mt-6 space-y-6">
@@ -62,18 +58,7 @@ const Settings: React.FC<SettingsProps> = ({
           />
         </label>
         {/* Sounds */}
-        {/* Music */}
-        <label className="flex items-center justify-between" htmlFor="music-toggle">
-          <span id="music-label">With music</span>
-          <input
-            id="music-toggle"
-            type="checkbox"
-            checked={music}
-            onChange={(e) => setMusic(e.target.checked)}
-            className="h-5 w-5"
-            aria-labelledby="music-label"
-          />
-        </label>
+        {/* Music option removed */}
         <label className="flex items-center justify-between" htmlFor="sounds-toggle">
           <span id="sounds-label">Sounds</span>
           <input
