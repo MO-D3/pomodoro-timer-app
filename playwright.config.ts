@@ -15,7 +15,7 @@ export default defineConfig({
   reporter: 'list',
   fullyParallel: true,
   use: {
-    baseURL: previewURL + basePath, // lokalnie "/"; w CI "/<repo>/"
+    baseURL: previewURL + basePath,
     browserName: 'chromium',
     headless: true,
     viewport: { width: 1280, height: 720 },
