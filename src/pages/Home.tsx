@@ -41,18 +41,13 @@ const Home: React.FC = () => {
     reset();
     lofiMusic.pause();
     setMusicPlaying(false); // Always show play icon after preset change
-    // setMusic(false); // removed, not needed
   };
   // Preferences stored in localStorage
-  const [autoStartBreak, setAutoStartBreak] = useLocalStorage('autoStartBreak', false);
-  const [autoStartWork, setAutoStartWork] = useLocalStorage('autoStartWork', false);
   const [sounds, setSounds] = useLocalStorage('sounds', true);
   const [volume, setVolume] = useLocalStorage('volume', 70);
   const [notificationsEnabled, setNotificationsEnabled] = useLocalStorage('notifications', false);
   const [vibrations, setVibrations] = useLocalStorage('vibrations', false);
-  // Music is now controlled only by Play/Pause button, not settings
-  // Remove all traces of setMusic/music from settings and state
-  // const [music, setMusic] = useLocalStorage('music', true);
+  
   const music = true;
   // Stats per day stored in localStorage
   const todayKey = `stats-${new Date().toISOString().slice(0, 10)}`;
@@ -81,8 +76,6 @@ const Home: React.FC = () => {
         selectedIndex === 0
           ? (isTestMode ? numericCustomBreak / 60 : numericCustomBreak)
           : PRESETS[selectedIndex]?.break ?? 5,
-      autoStartBreak,
-      autoStartWork,
     },
     (completedPhase: Phase) => {
       // callback when a phase completes
@@ -278,10 +271,6 @@ const Home: React.FC = () => {
       {/* ...timer panel now handled above with custom inputs beside timer... */}
       {onSettings && (
         <Settings
-          autoStartBreak={autoStartBreak}
-          setAutoStartBreak={setAutoStartBreak}
-          autoStartWork={autoStartWork}
-          setAutoStartWork={setAutoStartWork}
           sounds={sounds}
           setSounds={setSounds}
           volume={volume}

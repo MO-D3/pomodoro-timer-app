@@ -19,8 +19,8 @@ export function useLocalStorage<T>(key: string, initial: T) {
   useEffect(() => {
     try {
       window.localStorage.setItem(key, JSON.stringify(value));
-    } catch {
-      // no-op for environments without storage
+    } catch (e: unknown) {
+      console.warn(`useLocalStorage: failed to set key "${key}" in localStorage`, e);
     }
   }, [key, value]);
 

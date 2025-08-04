@@ -1,10 +1,6 @@
 import * as React from 'react';
 
 interface SettingsProps {
-  autoStartBreak: boolean;
-  setAutoStartBreak: (v: boolean) => void;
-  autoStartWork: boolean;
-  setAutoStartWork: (v: boolean) => void;
   sounds: boolean;
   setSounds: (v: boolean) => void;
   volume: number;
@@ -17,10 +13,6 @@ interface SettingsProps {
 }
 
 const Settings: React.FC<SettingsProps> = ({
-  autoStartBreak,
-  setAutoStartBreak,
-  autoStartWork,
-  setAutoStartWork,
   sounds,
   setSounds,
   volume,
@@ -35,28 +27,6 @@ const Settings: React.FC<SettingsProps> = ({
     <div id="settings-panel" role="tabpanel" className="mt-6 space-y-6">
       <h2 className="text-2xl font-semibold">Settings</h2>
       <div className="space-y-4">
-        {/* Auto start break */}
-        <label className="flex items-center justify-between">
-          <span>Breaks auto-start</span>
-          <input
-            type="checkbox"
-            checked={autoStartBreak}
-            onChange={(e) => setAutoStartBreak(e.target.checked)}
-            className="h-5 w-5"
-            aria-label="Breaks Auto-start"
-          />
-        </label>
-        {/* Auto start work */}
-        <label className="flex items-center justify-between">
-          <span>Work auto-start</span>
-          <input
-            type="checkbox"
-            checked={autoStartWork}
-            onChange={(e) => setAutoStartWork(e.target.checked)}
-            className="h-5 w-5"
-            aria-label="Work Auto-start"
-          />
-        </label>
         {/* Sounds */}
         {/* Music option removed */}
         <label className="flex items-center justify-between" htmlFor="sounds-toggle">
