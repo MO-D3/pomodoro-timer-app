@@ -17,5 +17,7 @@ export default defineConfig([
     },
   },
   ...tseslint.configs.recommended,
-  ...(Array.isArray(pluginReact.configs.flat.recommended) ? pluginReact.configs.flat.recommended : [pluginReact.configs.flat.recommended]),
+  ...(Array.isArray(pluginReact.configs.flat.recommended)
+    ? pluginReact.configs.flat.recommended
+    : [pluginReact.configs.flat.recommended]),
 ]);

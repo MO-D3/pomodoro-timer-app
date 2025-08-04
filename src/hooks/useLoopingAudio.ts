@@ -1,10 +1,11 @@
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 
 /**
  * useLoopingAudio: Like useAudio, but loops and exposes play/pause/stop controls.
  */
 export function useLoopingAudio(src: string, volume: number, enabled: boolean) {
   const audioRef = useRef<HTMLAudioElement | null>(null);
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     const audio = new Audio(src);
@@ -27,9 +28,11 @@ export function useLoopingAudio(src: string, volume: number, enabled: boolean) {
     const audio = audioRef.current;
     if (!audio) return;
     try {
+      setError(null);
       await audio.play();
-    } catch {
-      // ignore play error (e.g. autoplay restrictions)
+    } catch (e: unknown) {
+      console.warn('Looping audio playback failed:', e);
+      setError('Unable to play looping audio (it may be blocked by the browser)');
     }
   };
 
@@ -44,5 +47,5 @@ export function useLoopingAudio(src: string, volume: number, enabled: boolean) {
     }
   };
 
-  return { play, pause, stop, audioRef };
+  return { play, pause, stop, audioRef, error };
 }

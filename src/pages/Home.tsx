@@ -13,7 +13,7 @@ import { useLocalStorage } from '../hooks/useLocalStorage';
 import { useNotifications } from '../hooks/useNotifications';
 import { useAudio } from '../hooks/useAudio';
 import { useLofiMusic } from '../hooks/useLofiMusic';
-import { FaPlay, FaPause, FaMusic } from 'react-icons/fa';
+import { FaPlay, FaPause } from 'react-icons/fa';
 // Import audio files via Vite so paths are resolved at build time
 import endSound from '../assets/sounds/end.mp3';
 
@@ -30,8 +30,8 @@ const Home: React.FC = () => {
   // Selected tab index; defaults to 25/5 (now index 2)
   const [selectedIndex, setSelectedIndex] = useState(2);
   // Custom times state
-  const [customWork, setCustomWork] = useState(isTestMode ? 1 : 25);
-  const [customBreak, setCustomBreak] = useState(isTestMode ? 1 : 5);
+  const [customWork, setCustomWork] = useState<string>(isTestMode ? '1' : '25');
+  const [customBreak, setCustomBreak] = useState<string>(isTestMode ? '1' : '5');
   // Music playing state for icon toggle
   const [musicPlaying, setMusicPlaying] = useState(false);
 
@@ -41,18 +41,13 @@ const Home: React.FC = () => {
     reset();
     lofiMusic.pause();
     setMusicPlaying(false); // Always show play icon after preset change
-    // setMusic(false); // removed, not needed
   };
   // Preferences stored in localStorage
-  const [autoStartBreak, setAutoStartBreak] = useLocalStorage('autoStartBreak', false);
-  const [autoStartWork, setAutoStartWork] = useLocalStorage('autoStartWork', false);
   const [sounds, setSounds] = useLocalStorage('sounds', true);
   const [volume, setVolume] = useLocalStorage('volume', 70);
   const [notificationsEnabled, setNotificationsEnabled] = useLocalStorage('notifications', false);
   const [vibrations, setVibrations] = useLocalStorage('vibrations', false);
-  // Music is now controlled only by Play/Pause button, not settings
-  // Remove all traces of setMusic/music from settings and state
-  // const [music, setMusic] = useLocalStorage('music', true);
+
   const music = true;
   // Stats per day stored in localStorage
   const todayKey = `stats-${new Date().toISOString().slice(0, 10)}`;
@@ -66,19 +61,25 @@ const Home: React.FC = () => {
   const endAudio = useAudio(endSound, volume, sounds);
   const lofiMusic = useLofiMusic(volume, music);
 
+  // Parse custom values, defaulting to 1 when empty/invalid
+  const numericCustomWork = Number(customWork) || 1;
+  const numericCustomBreak = Number(customBreak) || 1;
+
   // Timer hook
   const { minutes, seconds, progress, phase, isRunning, start, pause, reset } = useTimer(
     {
       workMinutes:
         selectedIndex === 0
-          ? (isTestMode ? customWork / 60 : customWork)
-          : PRESETS[selectedIndex]?.work ?? 25,
+          ? isTestMode
+            ? numericCustomWork / 60
+            : numericCustomWork
+          : (PRESETS[selectedIndex]?.work ?? 25),
       breakMinutes:
         selectedIndex === 0
-          ? (isTestMode ? customBreak / 60 : customBreak)
-          : PRESETS[selectedIndex]?.break ?? 5,
-      autoStartBreak,
-      autoStartWork,
+          ? isTestMode
+            ? numericCustomBreak / 60
+            : numericCustomBreak
+          : (PRESETS[selectedIndex]?.break ?? 5),
     },
     (completedPhase: Phase) => {
       // callback when a phase completes
@@ -98,9 +99,12 @@ const Home: React.FC = () => {
         setStats((prev) => {
           const newSessions = prev.sessions + 1;
           // Use correct work minutes for custom preset
-          const workMinutesToAdd = selectedIndex === 0
-            ? (isTestMode ? customWork / 60 : customWork)
-            : PRESETS[selectedIndex].work;
+          const workMinutesToAdd =
+            selectedIndex === 0
+              ? isTestMode
+                ? numericCustomWork / 60
+                : numericCustomWork
+              : PRESETS[selectedIndex].work;
           const newWorkMinutes = prev.workMinutes + workMinutesToAdd;
           if (prev.sessions === newSessions && prev.workMinutes === newWorkMinutes) {
             return prev;
@@ -135,7 +139,10 @@ const Home: React.FC = () => {
   return (
     <Layout>
       {/* LinkedIn link above Presets */}
-      <div className="flex items-center justify-center mt-2 mb-2" style={{ marginTop: '0.25rem', marginBottom: '0.25rem' }}>
+      <div
+        className="flex items-center justify-center mt-2 mb-2"
+        style={{ marginTop: '0.25rem', marginBottom: '0.25rem' }}
+      >
         <a
           href="https://www.linkedin.com/in/michal-olesiak/"
           target="_blank"
@@ -154,7 +161,7 @@ const Home: React.FC = () => {
             aria-hidden="true"
             focusable="false"
           >
-            <path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-10h3v10zm-1.5-11.268c-.966 0-1.75-.785-1.75-1.75s.784-1.75 1.75-1.75 1.75.785 1.75 1.75-.784 1.75-1.75 1.75zm15.5 11.268h-3v-5.604c0-1.337-.025-3.063-1.868-3.063-1.868 0-2.154 1.459-2.154 2.967v5.7h-3v-10h2.881v1.367h.041c.401-.761 1.379-1.563 2.838-1.563 3.036 0 3.6 2.001 3.6 4.601v5.595z"/>
+            <path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-10h3v10zm-1.5-11.268c-.966 0-1.75-.785-1.75-1.75s.784-1.75 1.75-1.75 1.75.785 1.75 1.75-.784 1.75-1.75 1.75zm15.5 11.268h-3v-5.604c0-1.337-.025-3.063-1.868-3.063-1.868 0-2.154 1.459-2.154 2.967v5.7h-3v-10h2.881v1.367h.041c.401-.761 1.379-1.563 2.838-1.563 3.036 0 3.6 2.001 3.6 4.601v5.595z" />
           </svg>
         </a>
       </div>
@@ -178,10 +185,21 @@ const Home: React.FC = () => {
                 max={isTestMode ? 600 : 120}
                 step={1}
                 value={customWork}
-                onChange={e => {
-                  const val = Math.max(1, Math.min(isTestMode ? 600 : 120, Math.floor(Number(e.target.value))));
-                  setCustomWork(val);
+                onChange={(e) => {
+                  const valStr = e.target.value;
+                  if (valStr === '') {
+                    setCustomWork('');
+                    return;
+                  }
+                  const num = Math.floor(Number(valStr));
+                  const clamped = Math.max(1, Math.min(isTestMode ? 600 : 120, num));
+                  setCustomWork(clamped.toString());
                   reset();
+                }}
+                onBlur={() => {
+                  if (customWork === '') {
+                    setCustomWork('1');
+                  }
                 }}
                 className="text-center border rounded px-2 py-1 w-[100px] text-black"
                 inputMode="numeric"
@@ -196,10 +214,21 @@ const Home: React.FC = () => {
                 max={isTestMode ? 600 : 120}
                 step={1}
                 value={customBreak}
-                onChange={e => {
-                  const val = Math.max(1, Math.min(isTestMode ? 600 : 120, Math.floor(Number(e.target.value))));
-                  setCustomBreak(val);
+                onChange={(e) => {
+                  const valStr = e.target.value;
+                  if (valStr === '') {
+                    setCustomBreak('');
+                    return;
+                  }
+                  const num = Math.floor(Number(valStr));
+                  const clamped = Math.max(1, Math.min(isTestMode ? 600 : 120, num));
+                  setCustomBreak(clamped.toString());
                   reset();
+                }}
+                onBlur={() => {
+                  if (customBreak === '') {
+                    setCustomBreak('1');
+                  }
                 }}
                 className="text-center border rounded px-2 py-1 w-[100px] text-black"
                 inputMode="numeric"
@@ -248,14 +277,10 @@ const Home: React.FC = () => {
       )}
 
       {/* ...music button now handled in timer panel above... */}
-      
+
       {/* ...timer panel now handled above with custom inputs beside timer... */}
       {onSettings && (
         <Settings
-          autoStartBreak={autoStartBreak}
-          setAutoStartBreak={setAutoStartBreak}
-          autoStartWork={autoStartWork}
-          setAutoStartWork={setAutoStartWork}
           sounds={sounds}
           setSounds={setSounds}
           volume={volume}

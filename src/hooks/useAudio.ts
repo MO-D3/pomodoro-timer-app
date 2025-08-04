@@ -1,4 +1,4 @@
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 
 /**
  * Hook for loading and playing audio.
@@ -6,6 +6,7 @@ import { useEffect, useRef } from 'react';
  */
 export function useAudio(src: string, volume: number, enabled: boolean) {
   const audioRef = useRef<HTMLAudioElement | null>(null);
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     const audio = new Audio(src);
@@ -18,7 +19,6 @@ export function useAudio(src: string, volume: number, enabled: boolean) {
     };
   }, [src]);
 
-  // Update volume and muted state when props change
   useEffect(() => {
     if (!audioRef.current) return;
     audioRef.current.volume = volume / 100;
@@ -29,12 +29,14 @@ export function useAudio(src: string, volume: number, enabled: boolean) {
     const audio = audioRef.current;
     if (!audio) return;
     try {
+      setError(null);
       audio.currentTime = 0;
       await audio.play();
-    } catch {
-      // swallow error (e.g. autoplay restrictions)
+    } catch (e: unknown) {
+      console.warn('Audio playback failed:', e);
+      setError('Unable to play audio (it may be blocked by the browser)');
     }
   };
 
-  return { play };
+  return { play, error };
 }

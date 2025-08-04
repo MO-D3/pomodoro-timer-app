@@ -6,8 +6,6 @@ export type TimerStatus = 'work' | 'break' | 'paused' | 'completed';
 export interface TimerOptions {
   workMinutes: number;
   breakMinutes: number;
-  autoStartBreak: boolean;
-  autoStartWork: boolean;
 }
 
 export interface TimerState {
@@ -21,7 +19,7 @@ export interface TimerState {
 }
 
 export function useTimer(options: TimerOptions, onComplete?: (phase: Phase) => void) {
-  const { workMinutes, breakMinutes, autoStartBreak, autoStartWork } = options;
+  const { workMinutes, breakMinutes } = options;
 
   const initialWorkMs = workMinutes * 60 * 1000;
   const initialBreakMs = breakMinutes * 60 * 1000;
@@ -72,33 +70,15 @@ export function useTimer(options: TimerOptions, onComplete?: (phase: Phase) => v
         setSessions((s) => s + 1);
         // switch to break
         setPhase('break');
-        const nextRemaining = initialBreakMs;
-        setRemainingMs(nextRemaining);
-        if (autoStartBreak) {
-          startTimeRef.current = performance.now();
-          initialRemainingRef.current = nextRemaining;
-          setRunning(true);
-          intervalRef.current = window.setInterval(tick, 200);
-        } else {
-          setRunning(false);
-        }
+        setRemainingMs(initialBreakMs);
       } else {
-        // phase === 'break'
         // switch to work
         setPhase('work');
-        const nextRemaining = initialWorkMs;
-        setRemainingMs(nextRemaining);
-        if (autoStartWork) {
-          startTimeRef.current = performance.now();
-          initialRemainingRef.current = nextRemaining;
-          setRunning(true);
-          intervalRef.current = window.setInterval(tick, 200);
-        } else {
-          setRunning(false);
-        }
+        setRemainingMs(initialWorkMs);
       }
+      setRunning(false);
     }
-  }, [autoStartBreak, autoStartWork, initialBreakMs, initialWorkMs, onComplete, phase]);
+  }, [initialBreakMs, initialWorkMs, onComplete, phase]);
 
   const start = useCallback(() => {
     if (isRunning) return;
