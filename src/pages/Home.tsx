@@ -30,8 +30,8 @@ const Home: React.FC = () => {
   // Selected tab index; defaults to 25/5 (now index 2)
   const [selectedIndex, setSelectedIndex] = useState(2);
   // Custom times state
-  const [customWork, setCustomWork] = useState(isTestMode ? 1 : 25);
-  const [customBreak, setCustomBreak] = useState(isTestMode ? 1 : 5);
+  const [customWork, setCustomWork] = useState<string>(isTestMode ? '1' : '25');
+  const [customBreak, setCustomBreak] = useState<string>(isTestMode ? '1' : '5');
   // Music playing state for icon toggle
   const [musicPlaying, setMusicPlaying] = useState(false);
 
@@ -66,16 +66,20 @@ const Home: React.FC = () => {
   const endAudio = useAudio(endSound, volume, sounds);
   const lofiMusic = useLofiMusic(volume, music);
 
+  // Parse custom values, defaulting to 1 when empty/invalid
+  const numericCustomWork = Number(customWork) || 1;
+  const numericCustomBreak = Number(customBreak) || 1;
+
   // Timer hook
   const { minutes, seconds, progress, phase, isRunning, start, pause, reset } = useTimer(
     {
       workMinutes:
         selectedIndex === 0
-          ? (isTestMode ? customWork / 60 : customWork)
+          ? (isTestMode ? numericCustomWork / 60 : numericCustomWork)
           : PRESETS[selectedIndex]?.work ?? 25,
       breakMinutes:
         selectedIndex === 0
-          ? (isTestMode ? customBreak / 60 : customBreak)
+          ? (isTestMode ? numericCustomBreak / 60 : numericCustomBreak)
           : PRESETS[selectedIndex]?.break ?? 5,
       autoStartBreak,
       autoStartWork,
@@ -99,7 +103,7 @@ const Home: React.FC = () => {
           const newSessions = prev.sessions + 1;
           // Use correct work minutes for custom preset
           const workMinutesToAdd = selectedIndex === 0
-            ? (isTestMode ? customWork / 60 : customWork)
+            ? (isTestMode ? numericCustomWork / 60 : numericCustomWork)
             : PRESETS[selectedIndex].work;
           const newWorkMinutes = prev.workMinutes + workMinutesToAdd;
           if (prev.sessions === newSessions && prev.workMinutes === newWorkMinutes) {
@@ -179,9 +183,20 @@ const Home: React.FC = () => {
                 step={1}
                 value={customWork}
                 onChange={e => {
-                  const val = Math.max(1, Math.min(isTestMode ? 600 : 120, Math.floor(Number(e.target.value))));
-                  setCustomWork(val);
+                  const valStr = e.target.value;
+                  if (valStr === '') {
+                    setCustomWork('');
+                    return;
+                  }
+                  const num = Math.floor(Number(valStr));
+                  const clamped = Math.max(1, Math.min(isTestMode ? 600 : 120, num));
+                  setCustomWork(clamped.toString());
                   reset();
+                }}
+                onBlur={() => {
+                  if (customWork === '') {
+                    setCustomWork('1');
+                  }
                 }}
                 className="text-center border rounded px-2 py-1 w-[100px] text-black"
                 inputMode="numeric"
@@ -197,9 +212,20 @@ const Home: React.FC = () => {
                 step={1}
                 value={customBreak}
                 onChange={e => {
-                  const val = Math.max(1, Math.min(isTestMode ? 600 : 120, Math.floor(Number(e.target.value))));
-                  setCustomBreak(val);
+                  const valStr = e.target.value;
+                  if (valStr === '') {
+                    setCustomBreak('');
+                    return;
+                  }
+                  const num = Math.floor(Number(valStr));
+                  const clamped = Math.max(1, Math.min(isTestMode ? 600 : 120, num));
+                  setCustomBreak(clamped.toString());
                   reset();
+                }}
+                onBlur={() => {
+                  if (customBreak === '') {
+                    setCustomBreak('1');
+                  }
                 }}
                 className="text-center border rounded px-2 py-1 w-[100px] text-black"
                 inputMode="numeric"
