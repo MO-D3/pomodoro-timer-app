@@ -13,7 +13,7 @@ import { useLocalStorage } from '../hooks/useLocalStorage';
 import { useNotifications } from '../hooks/useNotifications';
 import { useAudio } from '../hooks/useAudio';
 import { useLofiMusic } from '../hooks/useLofiMusic';
-import { FaPlay, FaPause, FaMusic } from 'react-icons/fa';
+import { FaPlay, FaPause } from 'react-icons/fa';
 // Import audio files via Vite so paths are resolved at build time
 import endSound from '../assets/sounds/end.mp3';
 
