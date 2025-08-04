@@ -19,7 +19,7 @@ export interface TimerState {
 }
 
 export function useTimer(options: TimerOptions, onComplete?: (phase: Phase) => void) {
-  const { workMinutes, breakMinutes} = options;
+  const { workMinutes, breakMinutes } = options;
 
   const initialWorkMs = workMinutes * 60 * 1000;
   const initialBreakMs = breakMinutes * 60 * 1000;

@@ -47,7 +47,7 @@ const Home: React.FC = () => {
   const [volume, setVolume] = useLocalStorage('volume', 70);
   const [notificationsEnabled, setNotificationsEnabled] = useLocalStorage('notifications', false);
   const [vibrations, setVibrations] = useLocalStorage('vibrations', false);
-  
+
   const music = true;
   // Stats per day stored in localStorage
   const todayKey = `stats-${new Date().toISOString().slice(0, 10)}`;
@@ -70,12 +70,16 @@ const Home: React.FC = () => {
     {
       workMinutes:
         selectedIndex === 0
-          ? (isTestMode ? numericCustomWork / 60 : numericCustomWork)
-          : PRESETS[selectedIndex]?.work ?? 25,
+          ? isTestMode
+            ? numericCustomWork / 60
+            : numericCustomWork
+          : (PRESETS[selectedIndex]?.work ?? 25),
       breakMinutes:
         selectedIndex === 0
-          ? (isTestMode ? numericCustomBreak / 60 : numericCustomBreak)
-          : PRESETS[selectedIndex]?.break ?? 5,
+          ? isTestMode
+            ? numericCustomBreak / 60
+            : numericCustomBreak
+          : (PRESETS[selectedIndex]?.break ?? 5),
     },
     (completedPhase: Phase) => {
       // callback when a phase completes
@@ -95,9 +99,12 @@ const Home: React.FC = () => {
         setStats((prev) => {
           const newSessions = prev.sessions + 1;
           // Use correct work minutes for custom preset
-          const workMinutesToAdd = selectedIndex === 0
-            ? (isTestMode ? numericCustomWork / 60 : numericCustomWork)
-            : PRESETS[selectedIndex].work;
+          const workMinutesToAdd =
+            selectedIndex === 0
+              ? isTestMode
+                ? numericCustomWork / 60
+                : numericCustomWork
+              : PRESETS[selectedIndex].work;
           const newWorkMinutes = prev.workMinutes + workMinutesToAdd;
           if (prev.sessions === newSessions && prev.workMinutes === newWorkMinutes) {
             return prev;
@@ -132,7 +139,10 @@ const Home: React.FC = () => {
   return (
     <Layout>
       {/* LinkedIn link above Presets */}
-      <div className="flex items-center justify-center mt-2 mb-2" style={{ marginTop: '0.25rem', marginBottom: '0.25rem' }}>
+      <div
+        className="flex items-center justify-center mt-2 mb-2"
+        style={{ marginTop: '0.25rem', marginBottom: '0.25rem' }}
+      >
         <a
           href="https://www.linkedin.com/in/michal-olesiak/"
           target="_blank"
@@ -151,7 +161,7 @@ const Home: React.FC = () => {
             aria-hidden="true"
             focusable="false"
           >
-            <path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-10h3v10zm-1.5-11.268c-.966 0-1.75-.785-1.75-1.75s.784-1.75 1.75-1.75 1.75.785 1.75 1.75-.784 1.75-1.75 1.75zm15.5 11.268h-3v-5.604c0-1.337-.025-3.063-1.868-3.063-1.868 0-2.154 1.459-2.154 2.967v5.7h-3v-10h2.881v1.367h.041c.401-.761 1.379-1.563 2.838-1.563 3.036 0 3.6 2.001 3.6 4.601v5.595z"/>
+            <path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-10h3v10zm-1.5-11.268c-.966 0-1.75-.785-1.75-1.75s.784-1.75 1.75-1.75 1.75.785 1.75 1.75-.784 1.75-1.75 1.75zm15.5 11.268h-3v-5.604c0-1.337-.025-3.063-1.868-3.063-1.868 0-2.154 1.459-2.154 2.967v5.7h-3v-10h2.881v1.367h.041c.401-.761 1.379-1.563 2.838-1.563 3.036 0 3.6 2.001 3.6 4.601v5.595z" />
           </svg>
         </a>
       </div>
@@ -175,7 +185,7 @@ const Home: React.FC = () => {
                 max={isTestMode ? 600 : 120}
                 step={1}
                 value={customWork}
-                onChange={e => {
+                onChange={(e) => {
                   const valStr = e.target.value;
                   if (valStr === '') {
                     setCustomWork('');
@@ -204,7 +214,7 @@ const Home: React.FC = () => {
                 max={isTestMode ? 600 : 120}
                 step={1}
                 value={customBreak}
-                onChange={e => {
+                onChange={(e) => {
                   const valStr = e.target.value;
                   if (valStr === '') {
                     setCustomBreak('');
@@ -267,7 +277,7 @@ const Home: React.FC = () => {
       )}
 
       {/* ...music button now handled in timer panel above... */}
-      
+
       {/* ...timer panel now handled above with custom inputs beside timer... */}
       {onSettings && (
         <Settings

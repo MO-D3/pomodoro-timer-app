@@ -46,7 +46,6 @@ test.describe('ARIA structure', () => {
   });
 });
 
-
 test.describe('Music play/pause accessibility', () => {
   test('music play/pause button is accessible and toggles state', async ({ page }) => {
     const pomodoro = new PomodoroPage(page);

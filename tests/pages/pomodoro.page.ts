@@ -26,9 +26,7 @@ export class PomodoroPage {
   }
 
   async goto(query: string = '') {
-    const path = query
-      ? (query.startsWith('/') ? `.${query}` : `./${query}`)
-      : './';
+    const path = query ? (query.startsWith('/') ? `.${query}` : `./${query}`) : './';
     await this.page.goto(path);
   }
   async setCustomWork(value: number) {

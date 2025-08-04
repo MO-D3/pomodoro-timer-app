@@ -1,4 +1,3 @@
-
 # Pomodoro With Me
 
 Pomodoro With Me is a minimalist, accessible Pomodoro timer app for focused work and breaks. Choose from presets or set custom times, track your daily stats, and enjoy optional lofi music, sounds, and notifications. All preferences are private and stored locally—no accounts or tracking. The app is fully keyboard-accessible, responsive, and tested end-to-end.
@@ -6,6 +5,7 @@ Pomodoro With Me is a minimalist, accessible Pomodoro timer app for focused work
 **Tech Stack:** React, TypeScript, Vite, Tailwind CSS, Playwright, ESLint, Prettier.
 
 **Main scripts (package.json):**
+
 - `dev`: Start the Vite development server
 - `build`: Build the app for production
 - `preview`: Preview the production build
